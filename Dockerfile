@@ -6,8 +6,10 @@ RUN mkdir /scripts
 COPY scripts /scripts 
 RUN /scripts/install_berkshelf_api.sh && mv /scripts/image_metadata.txt /etc/docker_image_metadata.txt && /scripts/set_user_berkshelf.sh && /scripts/cleanup.sh
 
-USER berkshelf
 
 EXPOSE 26200
 ENTRYPOINT ["/bin/bash", "-c"]
-CMD ["berks-api"]
+# Run as user: berkshelf but still enable logging as root to a running
+# container with "docker exec", thus do not add: "USER berkshelf".
+# $HOME must be set for berkshelf,
+CMD ["/usr/bin/run_berks_api.sh"]
