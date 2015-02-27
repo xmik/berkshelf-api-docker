@@ -1,15 +1,16 @@
 # Berkshelf-API Docker image
 
-Debian 7.5 with berkshelf-api 2.1.1. 
+Debian 7.5 with berkshelf-api 2.1.1. Tested with [debian:7.5](https://registry.hub.docker.com/u/library/debian/) and [cbuisson/chef-server](https://registry.hub.docker.com/u/cbuisson/chef-server/) (updated on 2014-11-21 21:53:41) images.
 
 ## Usage
 
-* Optionally set CHEF_SERVER_ENDPOINT. The default is: "https://chef_server", so if you run the container linking it to the chef server container (--link chef_server:chef_server), you don't have to set it. 
-* Mount the berkshelf.pem file (berkshelf is the chef server client here). 
+* Optionally set CHEF_SERVER_ENDPOINT. The default is: "https://chef_server", so if you run the container linking it to the chef server container (--link chef_server:chef_server), you don't have to set this variable. 
+* Mount the berkshelf.pem file (berkshelf is the chef server user here). 
 
 ### Examples
 ```bash
-docker run -dti --name berkshelf_api -v /path/to/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -e CHEF_SERVER_ENDPOINT=https://10.0.0.18:443 -p 26200:26200  berkshelf_api:0.0.2```
+docker run -dti --name berkshelf_api -v /path/to/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -e CHEF_SERVER_ENDPOINT=https://10.0.0.18:443 -p 26200:26200  berkshelf_api:0.0.2
+```
 
 or using the default chef server endpoint:
 ```bash
@@ -28,4 +29,4 @@ First some debian packages are installed (like: nano build-essential libarchive-
 
 Then a linux user: berkshelf is created and configured. 
 
-The script that will be ran at container start is /usr/bin/run_berks_api.sh, to run berks-api as berkshelf user and ensure its HOME set and to set /home/berkshelf/.berkshelf/api-server/config.json using CHEF_SERVER_ENDPOINT variable. 
+The script that will be ran at container start is /usr/bin/run_berks_api.sh. It runs berks-api as berkshelf user, ensures its HOME is set and sets /home/berkshelf/.berkshelf/api-server/config.json using CHEF_SERVER_ENDPOINT variable. 
