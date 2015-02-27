@@ -6,7 +6,7 @@ RUN gem install berkshelf-api --no-rdoc --no-ri --version 2.1.1
 
 RUN mkdir /scripts
 COPY ./scripts /scripts # copy contents of ./scripts into docker container /scripts
-RUN /scripts/set_user_berkshelf.sh && /scripts/cleanup.sh
+RUN mv /scripts/image_metadata.txt /etc/docker_image_metadata.txt && /scripts/set_user_berkshelf.sh && /scripts/cleanup.sh
 
 USER berkshelf
 
