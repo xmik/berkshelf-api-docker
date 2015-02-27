@@ -11,5 +11,4 @@ EXPOSE 26200
 ENTRYPOINT ["/bin/bash", "-c"]
 # Run as user: berkshelf but still enable logging as root to a running
 # container with "docker exec", thus do not add: "USER berkshelf".
-# $HOME must be set for berkshelf,
 CMD ["/usr/bin/run_berks_api.sh"]

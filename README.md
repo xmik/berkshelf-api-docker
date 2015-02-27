@@ -15,3 +15,8 @@ or using the default chef server endpoint:
 ```bash
 docker run -dti --name berkshelf_api -v /path/to/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -p 26200:26200 berkshelf_api
 ```
+
+A good idea is to link berkshelf_api container to a container with chef server with this option: 
+```bash
+--link chef_server:chef_server
+```
