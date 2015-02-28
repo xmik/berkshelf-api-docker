@@ -4,7 +4,7 @@ Debian 7.5 with berkshelf-api 2.1.1. Tested with [debian:7.5](https://registry.h
 
 ## Usage
 
-* Optionally set CHEF_SERVER_ENDPOINT. The default is: "https://chef_server", so if you run the container linking it to the chef server container (--link chef_server:chef_server), you don't have to set this variable. 
+* Optionally set CHEF_SERVER_ENDPOINT. The default is: "https://chef_server", so if you run the container linking it to the chef server container (--link chef_server:chef_server), you don't have to set this variable. This endpoint must be available for chef workstation to run `berks install` or `berks upload`. To change it while a container is running edit /usr/bin/run_berks_api.sh and restart the container.
 * Mount the berkshelf.pem file (berkshelf is the chef server user here). 
 
 ### Examples
