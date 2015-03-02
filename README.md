@@ -23,6 +23,12 @@ user@host:~$ berks search apt --source http://[container_ip]:26200
 apt (2.6.1)
 ```
 
+## Warning
+If in chef server there is both: a user and a client named berkshelf, you'll most probably get Permission denied. 
+
+## TODO
+* Abandon berks-api logs older than 1 day
+
 ## How it is done
 
 First some debian packages are installed (like: nano build-essential libarchive-dev ruby1.9.1 ruby1.9.1-dev), then the gem: berkshelf-api 2.1.1.
