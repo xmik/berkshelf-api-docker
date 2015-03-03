@@ -1,6 +1,6 @@
-# Berkshelf-API Docker image
+# berkshelf-api-docker 
 
-Debian 7.5 with berkshelf-api 2.1.1. Tested with [debian:7.5](https://registry.hub.docker.com/u/library/debian/) and [cbuisson/chef-server](https://registry.hub.docker.com/u/cbuisson/chef-server/) (updated on 2014-11-21 21:53:41) images.
+Debian 7.5 with berkshelf-api 2.1.1. Tested with images: [debian:7.5](https://registry.hub.docker.com/u/library/debian/) and [xmik/chef-server-docker](https://github.com/xmik/chef-server-docker) images.
 
 ## Usage
 
@@ -24,7 +24,15 @@ apt (2.6.1)
 ```
 
 ## Warning
-If in chef server there is both: a user and a client named berkshelf, you'll most probably get Permission denied. 
+If in chef server there is both: a user and a client named berkshelf, you'll most probably get Permission denied when authorizing as berkshelf. 
+
+## Build
+Build an image using the tag from script/image_metadata.txt. Use rake task:
+```ruby
+rake berkshelf_api:build
+```
+
+Size of [berkshelf_api:0.0.2](https://registry.hub.docker.com/u/xmik/berkshelf_api/) is 296.8 MB.
 
 ## TODO
 * Abandon berks-api logs older than 1 day
