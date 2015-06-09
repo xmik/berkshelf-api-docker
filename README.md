@@ -4,17 +4,13 @@ Debian 7.5 with berkshelf-api 2.1.1. Tested with images: [debian:7.5](https://re
 
 ## Usage
 
-* Optionally set CHEF_SERVER_ENDPOINT. The default is: "https://chef_server", so if you run the container linking it to the chef server container (--link chef_server:chef_server), you don't have to set this variable. This endpoint must be available for chef workstation to run `berks install` or `berks upload`. To change it while a container is running edit /usr/bin/run_berks_api.sh and restart the container.
-* Mount the berkshelf.pem file (berkshelf is the chef server user here). 
+1. Set environment variable: `CHEF_SERVER_ENDPOINT`. That endpoint must be reachable from chef workstation to run commands like `berks install` or `berks upload`.  The default is: "https://chef_server", (because I thought that when you run a berkshelf_api container and link it to the chef_server container (--link chef_server:chef_server), using the linked container name is enough). The most safe option is to set here **full Chef Server domain name and port**. To change it while a container is running edit /usr/bin/run_berks_api.sh and restart the container.
+2. Mount the berkshelf.pem file (berkshelf is the chef server user here). 
 
-### Examples
+### Real example
+Assumming your Chef Server is available at: https://chef.my-domain.com.
 ```bash
-docker run -dti --name berkshelf_api -v /path/to/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -e CHEF_SERVER_ENDPOINT=https://10.0.0.18:443 -p 26200:26200  berkshelf_api:0.0.2
-```
-
-or using the default chef server endpoint:
-```bash
-docker run -dti --name berkshelf_api -v /path/to/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -p 26200:26200 --link chef_server:chef_server berkshelf_api
+docker run -dti --name berkshelf_api -v /path/to/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -e CHEF_SERVER_ENDPOINT=https://chef.my-domain.com:443 --link chef_server:chef.my-domain.com -p 26200:26200  berkshelf_api:0.0.2
 ```
 
 To confirm that you have connected to berks-api server, search for some cookbook in your chef server, e.g. apt:
