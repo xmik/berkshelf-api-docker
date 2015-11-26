@@ -1,2 +1,0 @@
-image_name = berkshelf_api:0.0.3
-git_repository = berkshelf-api-docker

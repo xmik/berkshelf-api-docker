@@ -1,0 +1,8 @@
+{
+  "name": "chef-validator",
+  "public_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApZHYpz6Pg3nczswTyoyW\nLWTfmYgnFcN4maXev57FVMtXjvixLq4ohHgTyDea1nLe7gIt1yajzp9TFbL6wcnH\nO/gqeWVEjei3mF46ct1HOLluYa+RVFFQh6HuB/wfsBq4jjXegyuZPebPTr4T8V3x\njHIyviQRxGby1Y6hzXsLHuZUH5mjAOHuHtfDFyEUYBJ21/XoDEjZ9BOsaHpcImjP\nagfcI5qAPTrRaedyCotrCpJ0SmzlQKH2RUaTb+FzMZYUqHMuIRukQWv32A9vx4kF\nF1iMH+BCwoccf5xL4dwbyaUAhM8a75ntGkJoWFviM9UAUAeWLENIcbBBQ0Qoqo+o\nrwIDAQAB\n-----END PUBLIC KEY-----\n",
+  "validator": true,
+  "admin": false,
+  "json_class": "Chef::ApiClient",
+  "chef_type": "client"
+}

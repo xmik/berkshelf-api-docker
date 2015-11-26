@@ -1,0 +1,8 @@
+{
+  "name": "b0b1ebf4d09a",
+  "public_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA72H1lGdiBmNJqLAvS6Sg\nl+zKkimzoXuEDjcl/YSDsDXZ3pWU6hP2Lr5DYZCtz4hulSlBZER2nG5uPzAC0VDh\nNP08Of5/s93s8HuXUqMUu3Z06iiSLK58JjlNwnnXQFXvhxzGktPzMI8Ekax4zK/p\n2jw16LltmtNgDJjXM7zeTtHkwS+EJOBtliiB3jcC5dP8cPNj7tha6Am9FVnu95ri\n+1RW9bHS4PQE6pmxKKqqDo09r8wzBq5l+kEqMRObW480s/QbInzFFQ+nZOi4k2hY\nifGH0N8WVyI7JkPyM8tP7KGiCjpGknClz3VSPSoDRwPqB/SA41e9mC1/eoQTfjeE\n5QIDAQAB\n-----END PUBLIC KEY-----\n",
+  "validator": false,
+  "admin": false,
+  "json_class": "Chef::ApiClient",
+  "chef_type": "client"
+}

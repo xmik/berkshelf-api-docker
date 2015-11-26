@@ -1,0 +1,21 @@
+{
+  "name": "b0b1ebf4d09a",
+  "chef_environment": "_default",
+  "json_class": "Chef::Node",
+  "automatic": {
+
+  },
+  "normal": {
+
+  },
+  "chef_type": "node",
+  "default": {
+
+  },
+  "override": {
+
+  },
+  "run_list": [
+
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "dummy",
+  "description": "nothing wise",
+  "cookbook_versions": {
+    "dummy_cookbook": "= 0.1.0"
+  },
+  "json_class": "Chef::Environment",
+  "chef_type": "environment",
+  "default_attributes": {
+
+  },
+  "override_attributes": {
+
+  }
+}

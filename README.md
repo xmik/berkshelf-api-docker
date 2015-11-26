@@ -1,43 +1,63 @@
 # berkshelf-api-docker
 
-Debian 7.5 with berkshelf-api 2.1.1. Tested with images: [debian:7.5](https://registry.hub.docker.com/u/library/debian/) and [xmik/chef-server-docker](https://github.com/xmik/chef-server-docker) images.
+Debian Jessie with berkshelf-api 2.1.1. Base image: ruby:2.2.3-slim. Tested with
+ Chef Server 12 docker image: [3ofcoins/docker-chef-server](https://github.com/3ofcoins/docker-chef-server).
 
 ## Usage
+Assuming that:
+  * your Chef Server is already running and is accessible by chef.example.com
+  * there is Chef Server user: berkshelf (probably client is also ok, but
+   never both, you'll most probably get Permission denied when authorizing as
+   berkshelf)
 
-1. Set environment variable: `CHEF_SERVER_ENDPOINT`. That endpoint must be reachable from chef workstation to run commands like `berks install` or `berks upload`.  The default is: "https://chef_server", (because I thought that when you run a berkshelf_api container and link it to the chef_server container (--link chef_server:chef_server), using the linked container name is enough). The most safe option is to set here **full Chef Server domain name and port**. To change it while a container is running edit /usr/bin/run_berks_api.sh and restart the container.
-2. You can also set environment variable: `CHEF_CLIENT_NAME`, which is by default set to "berkshelf".
-2. Mount the berkshelf.pem file (berkshelf is the chef server user here).
-
-### Real example
-Assumming your Chef Server is available at: https://chef.my-domain.com.
+Run this docker image e.g. like this:
 ```bash
-docker run -dti --name berkshelf_api -v /path/to/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -e CHEF_SERVER_ENDPOINT=https://chef.my-domain.com:443 --link chef_server:chef.my-domain.com -p 26200:26200  berkshelf_api:0.0.3
+$ docker run -dti --name berks -v ${PWD}/test/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -e CHEF_SERVER_ENDPOINT="https://chef.example.com:443" -e BERKS_BUILD_INTERVAL=15 -e CHEF_ORGANIZATION="/organizations/testorg" --link chef_server:chef.example.com -p 26200:26200  berkshelf-api-docker:0.0.4
 ```
 
-To confirm that you have connected to berks-api server, search for some cookbook in your chef server, e.g. apt:
+where:
+  * you have to mount pem file for Chef Server user: berkshelf
+  * `CHEF_SERVER_ENDPOINT` is your Chef Server url reachable from chef workstations.
+   Default is "https://chef.example.com:443". It should be **full Chef Server
+   protocol and domain name and port**.
+  * `CHEF_CLIENT_NAME` is the Chef Server user or client name, default is "berkshelf"
+  * `BERKS_BUILD_INTERVAL` sets build_interval - the number of seconds before it
+   refreshes from the endpoints (see [berkshelf/berkshelf-api](https://github.com/berkshelf/berkshelf-api)),
+   default here is 5, just as in berkshelf-api. berkshelf-api, if correctly
+   configured, sends 9 messages per build_interval.
+  * `CHEF_ORGANIZATION` is obligatory if you use Chef Server 12. Default is empty,
+   so that it works for Chef Server 11. Example value is: "/organizations/testorg"
+   and it must start with slash.
+  * the link is necessary only if `CHEF_SERVER_ENDPOINT` is not reachable for
+   berks container, so e.g. when testing.
+
+When berks container is already running and you want to change some configuration,
+ editing `/home/berkshelf/.berkshelf/api-server/config.json` file will have no
+ effect, because it is generated. Edit then this file: `/usr/bin/run_berks_api.sh`
+ and restart the container. To login into the container:
 ```bash
-user@host:~$ berks search apt --source http://[container_ip]:26200
+$ docker exec -ti berks /bin/bash
+```
+
+### Verification
+To confirm that you have connected from chef workstation to berks-api server,
+ search for some cookbook in your Chef Server, e.g. apt:
+```bash
+$ berks search apt --source http://[container_ip]:26200
 apt (2.6.1)
 ```
 
-## Warning
-If in chef server there is both: a user and a client named berkshelf, you'll most probably get Permission denied when authorizing as berkshelf.
-
 ## Build
-Build an image using the tag from script/image_metadata.txt. Use rake task:
+Build an image using the tag from script/version.txt. Use rake task:
 ```ruby
-rake berkshelf_api:build
+$ rake build
 ```
 
-Size of [berkshelf_api:0.0.3](https://registry.hub.docker.com/u/xmik/berkshelf_api/) is 296.8 MB.
+Size of [berkshelf-api-docker:0.0.4](https://registry.hub.docker.com/u/xmik/berkshelf-api-docker/) is 500 MB.
 
-## TODO
-* Abandon berks-api logs older than 1 day
-
-## How it is done
-
-First some debian packages are installed (like: nano build-essential libarchive-dev ruby1.9.1 ruby1.9.1-dev), then the gem: berkshelf-api 2.1.1.
-
-Then a linux user: berkshelf is created and configured.
-
-The script that will be ran at container start is /usr/bin/run_berks_api.sh. It runs berks-api as berkshelf user, ensures its HOME is set and sets /home/berkshelf/.berkshelf/api-server/config.json using CHEF_SERVER_ENDPOINT variable.
+## Test
+There is a directory: `test`, which contains files needed to test the deployment of
+ Chef Server 12 (using 3ofcoins/docker-chef-server docker image) and this berkshelf-api
+ docker image. The script `run.sh` contains all the steps needed. Part of it can
+ be ran automatically. There is also a result of running `knife backup export`
+ on Chef Server 11 to test running `knife backup restore`.
