@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This assumes empty chef_server and therefore there is much manual work to do.
+# The manual part is commented out.
+
 test_chef_domain="chef.example.com"
 test_chef_url="https://$test_chef_domain"
 oc_id_admins="admin"
@@ -7,7 +10,7 @@ oc_id_admins="admin"
 # 1. run chef server
 # using dummy PUBLIC_URL such as "test_chef_server" will result in an error:
 # the scheme https does not accept registry part: test_chef_server (or bad hostname?)
-docker run -e PUBLIC_URL=$test_chef_url -e OC_ID_ADMINISTRATORS=$oc_id_admins -p 443:443 --name chef_server -dti quay.io/3ofcoins/chef-server
+docker run -e PUBLIC_URL=$test_chef_url -e OC_ID_ADMINISTRATORS=$oc_id_admins -v /tmp/chef_server_data:/var/opt/opscode -p 443:443 --name chef_server -dti quay.io/3ofcoins/chef-server
 
 # 2. wait for the "the chef-server-ctl reconfigure" to end, it takes ~4 minutes
 # on my workstation
@@ -55,4 +58,4 @@ docker exec -ti chef_server /bin/bash -c "chef-server-ctl add-user-key admin --p
 # knife cookbook list --all -c test/knife_test.rb
 
 # 8. run berks container (docker volumes only accept absolute paths)
-docker run -dti --name berks -v ${PWD}/test/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -e CHEF_SERVER_ENDPOINT=$test_chef_url:443 -e BERKS_BUILD_INTERVAL=15 -e CHEF_ORGANIZATION="/organizations/testorg" --link chef_server:$test_chef_domain -p 26200:26200  berkshelf-api-docker:0.0.4
+# docker run -dti --name berks -v ${PWD}/test/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -e CHEF_SERVER_ENDPOINT=$test_chef_url:443 -e BERKS_BUILD_INTERVAL=15 -e CHEF_ORGANIZATION="/organizations/testorg" --link chef_server:$test_chef_domain -p 26200:26200  xmik/berkshelf-api-docker:0.0.4

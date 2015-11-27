@@ -12,7 +12,7 @@ Assuming that:
 
 Run this docker image e.g. like this:
 ```bash
-$ docker run -dti --name berks -v ${PWD}/test/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -e CHEF_SERVER_ENDPOINT="https://chef.example.com:443" -e BERKS_BUILD_INTERVAL=15 -e CHEF_ORGANIZATION="/organizations/testorg" --link chef_server:chef.example.com -p 26200:26200  berkshelf-api-docker:0.0.4
+$ docker run -dti --name berks -v ${PWD}/test/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -e CHEF_SERVER_ENDPOINT="https://chef.example.com:443" -e BERKS_BUILD_INTERVAL=15 -e CHEF_ORGANIZATION="/organizations/testorg" --link chef_server:chef.example.com -p 26200:26200  xmik/berkshelf-api-docker:0.0.4
 ```
 
 where:
