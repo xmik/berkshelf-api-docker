@@ -35,27 +35,28 @@ docker exec -ti chef_server /bin/bash -c "chef-server-ctl org-create testorg "Te
 # 4. transfer test_admin public pem key into container and associate with admin user
 docker cp test/test_admin.pem.pub chef_server:/etc/chef/test_admin.pem.pub
 docker exec -ti chef_server /bin/bash -c "chef-server-ctl add-user-key admin --public-key-path /etc/chef/test_admin.pem.pub"
-# to get public key from private key:
-# openssl rsa -in test/test_admin.pem -pubout > test/test_admin.pem.pub
+## to get public key from private key:
+## openssl rsa -in test/test_admin.pem -pubout > test/test_admin.pem.pub
 
-# 5. to make knife commands work from your current machine (chef workstation),
-# add in /etc/hosts on current machine a line with chef_server ip and
-# the $test_chef_url
-# 6. test that knife_test.rb works, should return "admin"
+## 5. to make knife commands work from your current machine (chef workstation),
+## add in /etc/hosts on current machine a line with chef_server ip and
+## the $test_chef_url
+## 6. test that knife_test.rb works, should return "admin"
 # knife user list -c test/knife_test.rb
-# 7. restore backup made with "knife-backup" (tested with version 0.0.11)
-# knife backup restore cookbooks roles environments clients users nodes -D test/knife_backup_exported_11 -c test/knife_test.rb
+## 7. restore backup made with "knife-backup" (tested with version 0.0.11)
+# knife backup restore cookbooks roles environments clients users nodes -D test/knife_backup_exported_11 -c test/knife_test.rb -y
 
-# users from Chef Server 11 will not be restored into Chef Server 12
-# (#<Net::HTTPBadRequest:0x00000003b65c58>)
-# so to add new user berkshelf:
-# chef-server-ctl user-create berkshelf berkshelf berkshelf berkshelf@example.com password -f /etc/chef/berkshelf.pem
-# chef-server-ctl org-user-add testorg berkshelf --admin
+## restoring backup here is only to show more complete deployment. Users from 
+## Chef Server 11 will not be restored into Chef Server 12
+## (#<Net::HTTPBadRequest:0x00000003b65c58>)
+## so to add new user berkshelf:
+# docker exec -ti chef_server /bin/bash -c "chef-server-ctl user-create berkshelf berkshelf berkshelf berkshelf@example.com password -f /etc/chef/berkshelf.pem"
+# docker exec -ti chef_server /bin/bash -c "chef-server-ctl org-user-add testorg berkshelf --admin"
 # docker cp test/berkshelf.pem.pub chef_server:/etc/chef/berkshelf.pem.pub
 # docker exec -ti chef_server /bin/bash -c "chef-server-ctl add-user-key berkshelf --public-key-path /etc/chef/berkshelf.pem.pub"
 
-# to see that cookbooks and all their versions are restored:
+## To see that cookbooks and all their versions are restored:
 # knife cookbook list --all -c test/knife_test.rb
 
-# 8. run berks container (docker volumes only accept absolute paths)
+## 8. run berks container (docker volumes only accept absolute paths)
 # docker run -dti --name berks -v ${PWD}/test/berkshelf.pem:/home/berkshelf/.chef/berkshelf.pem -e CHEF_SERVER_ENDPOINT=$test_chef_url:443 -e BERKS_BUILD_INTERVAL=15 -e CHEF_ORGANIZATION="/organizations/testorg" --link chef_server:$test_chef_domain -p 26200:26200  xmik/berkshelf-api-docker:0.0.4
